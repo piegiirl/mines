@@ -11,8 +11,31 @@ class PhaseMachine {
             return "playing";
         },
         playing: async () => {
-
-            return "";
+          document.getElementById("button-bet")!.style.visibility = "hidden"; 
+          document.getElementById("button-cash-out")!.style.visibility = "visible";
+          this.GridCells.forEach(element =>  element.classList.add("active")); 
+          function waitForDivClick() {
+            return new Promise<{divId: number}>((resolve) => {
+            function clickHandler(e: Event) {
+            if (e.target instanceof HTMLDivElement) {
+              const id = parseInt(e.target.id);
+              if(!isNaN(id) && id >= 1 && id <= 25) {        
+                document.removeEventListener('click', clickHandler);
+                resolve({
+                  divId: id,
+                });
+              }
+            }  
+          }
+          document.addEventListener('click', clickHandler);
+          });
+        }
+        const result = await waitForDivClick();
+        console.log(result);
+        return "revealing";
+        },
+        revealing: async () => {
+          return "";
         }
     } 
     constructor() {
