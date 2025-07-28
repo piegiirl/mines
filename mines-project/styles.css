@@ -453,21 +453,20 @@ h1 {
 
 /* Стили для ячеек сетки */
 .grid-cell {
-    width: 100px; /* Фиксированная ширина */
-    height: 80px; /* Фиксированная высота */
+    width: 100px; 
+    height: 80px; 
     background: radial-gradient(ellipse at center, #014a99, #1578e3); 
-    border-radius: 5px; /* Скругление углов */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Тень для объёма */
+    border-radius: 5px; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2); 
     cursor:pointer;
+    transform-style: preserve-3d;
+    transition: transform 0.6s;
 }
-/* Стили для ячеек сетки выигрышные*/
-.grid-cell-win {
-    width: 100px; /* Фиксированная ширина */
-    height: 80px; /* Фиксированная высота */
-    background: radial-gradient(ellipse at center, #ff8903, #be660e); 
-    border-radius: 5px; /* Скругление углов */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Тень для объёма */
-    cursor:pointer;
+.win {
+    background: radial-gradient(ellipse at center, #f87c00, #fb942d); 
+}
+.loss {
+    background: radial-gradient(ellipse at center, #f93535, #9a2424); 
 }
 #button-random {
     border-radius: 50px;
@@ -533,4 +532,15 @@ h1 {
     font-size: 20px;
     right: 490px;
     background: radial-gradient(circle at center, #e0a100, #ffd000);
+}
+.cell-front,
+    .cell-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        transform: rotateY(180deg);
+}
+.flipped {
+    transform: rotateY(180deg);
 }

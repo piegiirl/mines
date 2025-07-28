@@ -2,12 +2,14 @@ import type { Phase, PhaseHandler } from "./types";
 
 class PhaseMachine {
     private GridCells: Array<HTMLDivElement> = [];
+    private openCell: number = 0;
+    private currentCellId: number = 0;
     private phases: Record<Phase, PhaseHandler> ={
         idle: async () => {
             document.getElementById("button-bet")!.style.visibility = "visible"; 
-            let openCell = 0;
             this.GridCells = Array.from({length: 25}, (_, i) => i + 1).map(_=>document.getElementById(`${_}`)! as HTMLDivElement);
             this.GridCells.forEach(element =>  element.classList.add("disabled"));
+            this.openCell = 0;
             return "playing";
         },
         playing: async () => {
@@ -31,11 +33,23 @@ class PhaseMachine {
           });
         }
         const result = await waitForDivClick();
+        this.currentCellId = result.divId;
         console.log(result);
         return "revealing";
         },
         revealing: async () => {
-          return "";
+          console.log(this.currentCellId);
+          document.getElementById("button-cash-out")!.style.visibility = "disabled";
+          this.openCell++;
+          if (this.openCell >= 5){
+            document.getElementById(""+this.currentCellId)!.classList.toggle('flipped');
+            document.getElementById(""+this.currentCellId)!.classList.add('loss');
+            return "loss";
+          } else {
+            document.getElementById(""+this.currentCellId)!.classList.toggle('flipped');
+            document.getElementById(""+this.currentCellId)!.classList.add('win');
+            return "playing";
+          }
         }
     } 
     constructor() {
