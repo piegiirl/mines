@@ -1,10 +1,14 @@
-body {
+
+*, *::before, *::after {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
+}
+body {
     font-family: Arial, sans-serif;
     background: linear-gradient(to right, #4ea2fc, #1578e3);
-    border: 4px solid  #fb942d;
- 
+    border: 0.25rem solid  #fb942d;
+    min-height: 100vh;
 }
 .game-container {
     display: flex;
@@ -15,522 +19,266 @@ body {
     text-align: center;
 }
 h1 {
-    color: rgb(255, 255, 255);
-    font-size: 16px;
-    padding: 10px 50px;
+    color: #ffffff;
+    font-size: 1rem;
+    padding: 0.7rem 2rem;
     background-color: #fb942d;
     top: 0;
-    border-radius: 0 0 20px 20px ;
+    border-radius: 0 0 1.5rem 1.5rem ;
     position: fixed;
-    margin: 0;
-    z-index: 2;
+    z-index: 20;
+    left: 50%;
+    transform: translateX(-50%);
 }
+.control-button {
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 1rem 1.6rem;
+    cursor: pointer;
+    background: radial-gradient(circle at center, #4ea2fc, #1578e3);
+    color: #fff;
+    border: none;
+    border-radius: 3rem;
+    position: fixed;
+    bottom: 0.9rem;
+    z-index: 30;
+}
+
 #button-rules{
     position:fixed;
-    font-size: 20px;
-    top: 8px;
-    left: 100px;
-    margin: 0;
-    padding: 5px 50px;
+    font-size: 1.25rem;
+    top: 0.5rem;
+    left: 5%;
+    padding: 0.3rem 4rem;
     cursor: pointer;
-    border-radius: 20px;
+    border-radius: 1rem;
     border: none;
     background: linear-gradient(to right, #f87c00,#fb942d);
-    z-index: 2;
+    z-index: 20;
 }
 #button-menu{
     position: fixed;
-    font-size: 20px;
-    top: 8px;
-    right: 20px;
-    margin: 0;
-    padding: 5px 10px;
+    font-size: 1.25rem;
+    top: 0.5rem;
+    right: 1%;
+    padding: 0.3rem 0.7rem;
     cursor: pointer;
     border-radius: 50%;
     border: none;
     background-color: #fb942d; 
-    color: white;
-    z-index: 2;
+    color: #ffffff;
+    z-index: 20;
 }
 #cash{
-    color: rgb(255, 255, 255);
-    font-size: 20px;
-    margin-bottom: 10px;
-    top: 8px;
-    right: 100px;
+    color: #ffffff;
+    font-size: 1.25rem;
+    padding: 0.3rem 2rem;
+    top: 0.5rem;
+    right: 3%;
     position: fixed;
-    margin: 0;
-    padding: 5px 10px;
-    z-index: 2;
+    z-index: 20;
 }
-#button-background-top{
-    border-radius: 20px;
+#top-bar{
+    border-radius: 1.5rem;
     width: 99%;
-    height: 40px;
+    height: 2.5rem;
     background-color: #0162c9;
-    z-index: 1;
+    z-index: 10;
     position: fixed;
-    top: 4px;
+    top: 0.25rem;
     border: none;
 }
-#button-background-down{
-    border-radius: 20px;
+#bottom-bar{
+    border-radius: 3rem;
     width: 99%;
-    height: 100px;
+    height: 5rem;
     background-color: #0162c9;
-    z-index: 1;
+    z-index: 10;
     position: fixed;
-    bottom: 4px;
+    bottom: 0.25rem;
     border: none;
 }
 #button-bet{
-    font-size: 24px;
+    font-size: 1.5rem;
     font-weight: bold;
-    padding: 20px 120px;
+    padding: 1rem 5rem;
     cursor: pointer;
     background-color: #57db2c;
     background: radial-gradient(circle at center, #57db2c, #268d04);
-    color: white;
+    color: #ffffff;
     border: none;
-    border-radius: 20px;
+    border-radius: 2rem;
     position: fixed;
-    bottom: 20px;
-    z-index: 2;
-    right: 300px
+    bottom: 0.9rem;
+    z-index: 20;
+    right: 20%;
 }
 #button-cash-out{
-    font-size: 24px;
+    font-size: 1.5rem;
     font-weight: bold;
-    padding: 20px 120px;
+    padding: 1rem 5rem;
     cursor: pointer;
     background: radial-gradient(circle at center, #f87c00, #fb942d);
-    color: white;
+    color: #ffffff;
     border: none;
-    border-radius: 20px;
+    border-radius: 2rem;
     position: fixed;
-    bottom: 20px;
-    z-index: 2;
-    right: 300px
-}
-
-#button-replay{
-    font-size: 24px;
-    font-weight: bold;
-    padding: 20px 30px;
-    cursor: pointer;
-    background: radial-gradient(circle at center, #4ea2fc, #1578e3);
-    color: white;
-    border: none;
-    border-radius: 20px;
-    position: fixed;
-    bottom: 20px;
-    z-index: 3;
-    right: 680px
-}
-#button-plus{
-    font-size: 24px;
-    font-weight: bold;
-    padding: 20px 30px;
-    cursor: pointer;
-    background: radial-gradient(circle at center, #4ea2fc, #1578e3);
-    color: white;
-    border: none;
-    border-radius: 50px;
-    position: fixed;
-    bottom: 20px;
-    z-index: 3;
-    left: 630px
-}
-#button-line{
-    font-size: 24px;
-    font-weight: bold;
-    padding: 20px 30px;
-    cursor: pointer;
-    background: radial-gradient(circle at center, #4ea2fc, #1578e3);
-    color: white;
-    border: none;
-    border-radius: 50px;
-    position: fixed;
-    bottom: 20px;
-    z-index: 3;
-    left: 530px
-}
-#button-minus{
-    font-size: 24px;
-    font-weight: bold;
-    padding: 20px 30px;
-    cursor: pointer;
-    background: radial-gradient(circle at center, #4ea2fc, #1578e3);
-    color: white;
-    border: none;
-    border-radius: 50px;
-    position: fixed;
-    bottom: 20px;
-    z-index: 3;
-    left: 445px
-}
-
-#button-background-set{
-    border-radius: 50px;
-    width: 35%;
-    height: 80px;
-    background-color: #004c9c;
-    z-index: 2;
-    position: fixed;
-    bottom: 15px;
-    border: none;
-    left: 200px;
-}
-#button-background-staf{
-    border-radius: 50px;
-    width: 10%;
-    height: 40px;
-    background-color: #003874;
-    z-index: 3;
-    position: fixed;
-    bottom: 20px;
-    border: none;
-    left: 250px;
-}
-#staf{
-    color: rgb(255, 255, 255);
-    font-size: 20px;
-    position: fixed;
-    margin: 0;
-    padding: 5px 10px;
-    z-index: 4;
-    position: fixed;
-    bottom: 22px;
-    border: none;
-    left: 300px;
-}
-#bet{
-    color: rgb(255, 255, 255);
-    font-size: 20px;
-    padding: 5px 10px;
-    z-index: 4;
-    position: fixed;
-    bottom: 60px;
-    border: none;
-    left: 270px;
-}
-body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    background: linear-gradient(to right, #4ea2fc, #1578e3);
-    border: 4px solid #fb942d;
-}
-
-.game-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    text-align: center;
-}
-
-h1 {
-    color: rgb(255, 255, 255);
-    font-size: 16px;
-    padding: 10px 50px;
-    background-color: #fb942d;
-    top: 0;
-    border-radius: 0 0 20px 20px;
-    position: fixed;
-    margin: 0;
-    z-index: 2;
-}
-
-#button-rules {
-    position: fixed;
-    font-size: 20px;
-    top: 8px;
-    left: 100px;
-    margin: 0;
-    padding: 5px 50px;
-    cursor: pointer;
-    border-radius: 20px;
-    border: none;
-    background: linear-gradient(to right, #f87c00, #fb942d);
-    z-index: 2;
-}
-
-#button-menu {
-    position: fixed;
-    font-size: 20px;
-    top: 8px;
-    right: 20px;
-    margin: 0;
-    padding: 5px 10px;
-    cursor: pointer;
-    border-radius: 50%;
-    border: none;
-    background-color: #fb942d;
-    color: white;
-    z-index: 2;
-}
-
-#cash {
-    color: rgb(255, 255, 255);
-    font-size: 20px;
-    top: 8px;
-    right: 100px;
-    position: fixed;
-    padding: 5px 10px;
-    z-index: 2;
-}
-
-#button-background-top {
-    border-radius: 20px;
-    width: 99%;
-    height: 40px;
-    background-color: #0162c9;
-    z-index: 1;
-    position: fixed;
-    top: 4px;
-    border: none;
-}
-
-#button-background-down {
-    border-radius: 20px;
-    width: 99%;
-    height: 100px;
-    background-color: #0162c9;
-    z-index: 1;
-    position: fixed;
-    bottom: 4px;
-    border: none;
-}
-
-#button-bet {
-    font-size: 24px;
-    font-weight: bold;
-    padding: 20px 120px;
-    cursor: pointer;
-    background: radial-gradient(circle at center, #57db2c, #268d04);
-    color: white;
-    border: none;
-    border-radius: 20px;
-    position: fixed;
-    bottom: 20px;
-    z-index: 2;
-    right: 300px;
-}
-
-#button-cash-out {
-    font-size: 24px;
-    font-weight: bold;
-    padding: 20px 120px;
-    cursor: pointer;
-    background: radial-gradient(circle at center, #f87c00, #fb942d);
-    color: white;
-    border: none;
-    border-radius: 20px;
-    position: fixed;
-    bottom: 20px;
-    z-index: 2;
-    right: 300px;
+    bottom: 0.9rem;
+    z-index: 20;
+    right: 20%;
 }
 
 #button-replay {
-    font-size: 24px;
-    font-weight: bold;
-    padding: 20px 30px;
-    cursor: pointer;
-    background: radial-gradient(circle at center, #4ea2fc, #1578e3);
-    color: white;
-    border: none;
-    border-radius: 20px;
-    position: fixed;
-    bottom: 20px;
-    z-index: 3;
-    right: 680px;
+    right: 38%;
 }
 
 #button-plus {
-    font-size: 24px;
-    font-weight: bold;
-    padding: 20px 30px;
-    cursor: pointer;
-    background: radial-gradient(circle at center, #4ea2fc, #1578e3);
-    color: white;
-    border: none;
-    border-radius: 50px;
-    position: fixed;
-    bottom: 20px;
-    z-index: 3;
-    left: 630px;
+    left: 50%;
 }
 
 #button-line {
-    font-size: 24px;
-    font-weight: bold;
-    padding: 20px 30px;
-    cursor: pointer;
-    background: radial-gradient(circle at center, #4ea2fc, #1578e3);
-    color: white;
-    border: none;
-    border-radius: 50px;
-    position: fixed;
-    bottom: 20px;
-    z-index: 3;
-    left: 530px;
+    left: 45%;
 }
 
 #button-minus {
-    font-size: 24px;
-    font-weight: bold;
-    padding: 20px 30px;
-    cursor: pointer;
-    background: radial-gradient(circle at center, #4ea2fc, #1578e3);
-    color: white;
-    border: none;
-    border-radius: 50px;
-    position: fixed;
-    bottom: 20px;
-    z-index: 3;
-    left: 445px;
+    left: 41%;
 }
 
-#button-background-set {
-    border-radius: 50px;
-    width: 35%;
-    height: 80px;
+#bar-background-set{
+    border-radius: 3rem;
+    width: 30%;
+    height: 4.9rem;
     background-color: #004c9c;
-    z-index: 2;
+    z-index: 20;
     position: fixed;
-    bottom: 15px;
+    bottom: 0.3rem;
     border: none;
-    left: 200px;
+    left: 25%;
 }
-
-#button-background-staf {
-    border-radius: 50px;
+#bar-background-staf{
+    border-radius: 1.5rem;
     width: 10%;
-    height: 40px;
+    height: 2.2rem;
     background-color: #003874;
-    z-index: 3;
+    z-index: 30;
     position: fixed;
-    bottom: 20px;
+    bottom: 1rem;
     border: none;
-    left: 250px;
+    left: 29%;
 }
-
-#staf {
-    color: rgb(255, 255, 255);
-    font-size: 20px;
-    padding: 5px 10px;
-    z-index: 4;
+#staf{
+    color: #ffffff;
+    font-size: 1.25rem;
     position: fixed;
-    bottom: 22px;
-    left: 300px;
-}
-
-#bet {
-    color: rgb(255, 255, 255);
-    font-size: 20px;
-    padding: 5px 10px;
-    z-index: 4;
+    padding: 0.5rem 1rem;
+    z-index: 40;
     position: fixed;
-    bottom: 60px;
-    left: 270px;
+    bottom: 1rem;
+    border: none;
+    left: 32%;
+}
+#bet{
+    color: #ffffff;
+    font-size: 1.25rem;
+    padding: 0.5rem 1rem;
+    z-index: 40;
+    position: fixed;
+    bottom: 2.7rem;
+    border: none;
+    left: 30%;
 }
 
-/* Стили для сетки 5x5 */
 #game-grid {
     display: grid;
-    grid-template-columns: repeat(5, 100px); /* 5 столбцов по 80px */
-    grid-template-rows: repeat(5, 100px); /* 5 строк по 80px */
-    gap: 10px; /* Отступы между ячейками 10px */
-    position: fixed; /* Фиксируем в центре экрана */
-    top: 48%; /* Центр по вертикали */
-    left: 50%; /* Центр по горизонтали */
-    transform: translate(-50%, -50%); /* Смещаем на половину ширины и высоты */
-    z-index: 5; /* Выше #button-background-top/down, ниже кнопок */
+    grid-template-columns: repeat(5, 7rem); 
+    grid-template-rows: repeat(5, 7rem); 
+    gap: 1rem; 
+    position: fixed; 
+    top: 48%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    z-index: 50; 
 }
 
-/* Стили для ячеек сетки */
 .grid-cell {
-    width: 100px; 
-    height: 80px; 
+    width: 7rem; 
+    height: 6rem; 
     background: radial-gradient(ellipse at center, #014a99, #1578e3); 
-    border-radius: 5px; 
+    border-radius: 0.5rem; 
     box-shadow: 0 2px 5px rgba(0,0,0,0.2); 
     cursor:pointer;
     transform-style: preserve-3d;
     transition: transform 0.6s;
 }
 .win {
-    background: radial-gradient(ellipse at center, #f87c00, #fb942d); 
+    background: radial-gradient(ellipse at center,#fb942d, #ff8000); 
 }
 .loss {
     background: radial-gradient(ellipse at center, #f93535, #9a2424); 
 }
 #button-random {
-    border-radius: 50px;
+    border-radius: 2rem;
     width: 16%;
-    height: 40px;
+    height: 2.8rem;
     background-color: #003874;
-    z-index: 4;
+    z-index: 40;
     position: fixed;
-    bottom: 110px;
+    bottom: 8rem;
     border: none;
-    left: 500px;
-    color:white;
-    font-size:24px;
+    left: 30%;
+    color:#ffffff;
+    font-size:1.5rem;
     cursor: pointer;
 }
 #button-auto{
-    border-radius: 50px;
+    border-radius: 2rem;
     width: 16%;
-    height: 40px;
+    height: 2.8rem;
     background-color: #003874;
-    z-index: 4;
+    z-index: 40;
     position: fixed;
-    bottom: 110px;
+    bottom: 8rem;
     border: none;
-    right: 500px;
-    color:white;
-    font-size:24px;
+    right: 30%;
+    color:#ffffff;
+    font-size:1.5rem;
     cursor: pointer;
 }
 #background-mines{
-    border-radius: 50px;
-    width: 35%;
-    height: 40px;
+    border-radius: 2rem;
+    width: 47%;
+    height: 3rem;
     background-color: #003874;
-    z-index: 3;
+    z-index: 30;
     position: fixed;
-    top: 60px;
+    top: 5rem;
     border: none;
 }
 #button-mines{
-    border-radius: 50px;
+    border-radius: 2rem;
     width: 14%;
-    height: 34px;
-    background-color: #004c9c;
-    z-index: 4;
+    height: 2.5rem;
+    z-index: 40;
     position: fixed;
-    top: 63px;
+    top: 5.2rem;
     border: none;
     color: white;
-    font-size: 20px;
-    left: 490px;
+    font-size: 1.5rem;
+    left: 30%;
     cursor:pointer;
+    background: radial-gradient(circle at center, #004c9c, #026bda);
 }
 #text-next{
-    border-radius: 50px;
+    border-radius: 2rem;
     width: 14%;
-    height: 34px;
-    z-index: 4;
+    height: 2.5rem;
+    z-index: 40;
     position: fixed;
-    top: 63px;
+    top: 5.2rem;
     border: none;
     color: white;
-    font-size: 20px;
-    right: 490px;
+    font-size: 1.5rem;
+    right: 30%;
     background: radial-gradient(circle at center, #e0a100, #ffd000);
 }
 .cell-front,
@@ -544,3 +292,4 @@ h1 {
 .flipped {
     transform: rotateY(180deg);
 }
+
