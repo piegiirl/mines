@@ -1,110 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Mines</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <div class="game-container">
         <div id="top-bar"></div>
         <h1>FUN MODE</h1>
-        <button id="button-rules">How to play?</button>
+        <button class="button-rules">How to play?</button>
+        <div class="modal-overlay" id="modal">
+            <div class="modal-content">
+                <button class="modal-close" aria-label="Закрыть окно">&times;</button>
+                <h2>HOW TO PLAY</h2>
+                <h3>MINES</h3>
+                <p>Each tile hides either a star or mine.</p>
+                <p>Increase the total number of stars for bigger odds and higher rewards. You can cash out after each
+                    turn, or try for increased winnings.</p>
+            </div>
+        </div>
+        <script>
+            // Получаем элементы
+            const rulesButton = document.querySelector('.button-rules');
+            const modal = document.querySelector('#modal');
+            const closeButton = document.querySelector('.modal-close');
+
+            // Функция для открытия модального окна
+            function openModal() {
+                modal.classList.add('active');
+                // Фокусируемся на крестик для доступности
+                closeButton.focus();
+            }
+            // Функция для закрытия модального окна
+            function closeModal() {
+                modal.classList.remove('active');
+            }
+            // Открытие модального окна по клику на кнопку
+            rulesButton.addEventListener('click', openModal);
+            // Закрытие модального окна по клику на крестик
+            closeButton.addEventListener('click', closeModal);
+            // Закрытие модального окна по клику на оверлей
+            modal.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            });
+            // Закрытие модального окна по нажатию Esc
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && modal.classList.contains('active')) {
+                    closeModal();
+                }
+            });
+        </script>
         <button id="button-menu">≡</button>
         <div id="cash">2000 usd</div>
         <div id="game-grid">
             <div class="grid-cell" id="1">
                 <div class="cell-front"></div>
-                <div class="cell-back"></div> 
+                <div class="cell-back"></div>
             </div>
             <div class="grid-cell" id="2">
                 <div class="cell-front"></div>
-                <div class="cell-back"></div> 
+                <div class="cell-back"></div>
             </div>
             <div class="grid-cell" id="3">
                 <div class="cell-front"></div>
-                <div class="cell-back"></div> 
+                <div class="cell-back"></div>
             </div>
             <div class="grid-cell" id="4">
                 <div class="cell-front"></div>
-                <div class="cell-back"></div> 
+                <div class="cell-back"></div>
             </div>
             <div class="grid-cell" id="5">
                 <div class="cell-front"></div>
-                <div class="cell-back"></div> 
+                <div class="cell-back"></div>
             </div>
             <div class="grid-cell" id="6">
                 <div class="cell-front"></div>
-                <div class="cell-back"></div> 
+                <div class="cell-back"></div>
             </div>
             <div class="grid-cell" id="7">
                 <div class="cell-front"></div>
-                <div class="cell-back"></div> 
+                <div class="cell-back"></div>
             </div>
             <div class="grid-cell" id="8">
                 <div class="cell-front"></div>
-                <div class="cell-back"></div> 
+                <div class="cell-back"></div>
             </div>
             <div class="grid-cell" id="9">
                 <div class="cell-front"></div>
-                <div class="cell-back"></div> 
+                <div class="cell-back"></div>
             </div>
             <div class="grid-cell" id="10">
                 <div class="cell-front"></div>
-                <div class="cell-back"></div> 
+                <div class="cell-back"></div>
             </div>
             <div class="grid-cell" id="11">
                 <div class="cell-front"></div>
-                <div class="cell-back"></div> 
+                <div class="cell-back"></div>
             </div>
             <div class="grid-cell" id="12">
                 <div class="cell-front"></div>
-                <div class="cell-back"></div> 
+                <div class="cell-back"></div>
             </div>
             <div class="grid-cell" id="13">
                 <div class="cell-front"></div>
-                <div class="cell-back"></div> 
+                <div class="cell-back"></div>
             </div>
             <div class="grid-cell" id="14">
                 <div class="cell-front"></div>
-                <div class="cell-back"></div> 
+                <div class="cell-back"></div>
             </div>
             <div class="grid-cell" id="15">
                 <div class="cell-front"></div>
-                <div class="cell-back"></div> 
+                <div class="cell-back"></div>
             </div>
             <div class="grid-cell" id="16">
                 <div class="cell-front"></div>
-                <div class="cell-back"></div> 
+                <div class="cell-back"></div>
             </div>
             <div class="grid-cell" id="17">
                 <div class="cell-front"></div>
-                <div class="cell-back"></div> 
+                <div class="cell-back"></div>
             </div>
             <div class="grid-cell" id="18">
                 <div class="cell-front"></div>
-                <div class="cell-back"></div> 
+                <div class="cell-back"></div>
             </div>
             <div class="grid-cell" id="19">
                 <div class="cell-front"></div>
-                <div class="cell-back"></div> 
+                <div class="cell-back"></div>
             </div>
             <div class="grid-cell" id="20">
                 <div class="cell-front"></div>
-                <div class="cell-back"></div> 
+                <div class="cell-back"></div>
             </div>
             <div class="grid-cell" id="21">
                 <div class="cell-front"></div>
-                <div class="cell-back"></div> 
+                <div class="cell-back"></div>
             </div>
             <div class="grid-cell" id="22">
                 <div class="cell-front"></div>
-                <div class="cell-back"></div> 
+                <div class="cell-back"></div>
             </div>
             <div class="grid-cell" id="23">
                 <div class="cell-front"></div>
-                <div class="cell-back"></div> 
+                <div class="cell-back"></div>
             </div>
             <div class="grid-cell" id="24">
                 <div class="cell-front"></div>
@@ -112,14 +157,14 @@
             </div>
             <div class="grid-cell" id="25">
                 <div class="cell-front"></div>
-                <div class="cell-back"></div> 
+                <div class="cell-back"></div>
             </div>
         </div>
         <canvas id="game-canvas" width="400" height="300"></canvas>
         <div id="bottom-bar"></div>
         <button id="button-bet">BET</button>
         <button id="button-cash-out">CASH OUT</button>
-<div class="bottom-controls">
+        <div class="bottom-controls">
             <button id="button-replay" class="control-button">▶</button>
             <button id="button-plus" class="control-button">+</button>
             <button id="button-line" class="control-button">💰</button>
@@ -133,8 +178,14 @@
         <button id="button-auto">Auto game</button>
         <div id="background-mines"></div>
         <button id="button-mines">mines</button>
+        <select class="mines-select">
+            <option value="1">Mines 1</option>
+            <option value="2">Mines 2</option>
+            <option value="3">Mines 3</option>
+        </select>
         <div id="text-next">Next: 1.2</div>
     </div>
     <script type="module" src="/src/mines.ts"></script>
 </body>
+
 </html>
