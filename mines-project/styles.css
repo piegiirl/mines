@@ -103,7 +103,6 @@ h1 {
     font-weight: bold;
     padding: 1rem 5rem;
     cursor: pointer;
-    background-color: #57db2c;
     background: radial-gradient(circle at center, #57db2c, #268d04);
     color: #ffffff;
     border: none;
