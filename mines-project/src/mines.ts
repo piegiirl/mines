@@ -33,6 +33,7 @@ await new Promise<void>((resolve) => {
           function clickHandler(e: Event) {
             if (e.target instanceof HTMLDivElement) {
               const id = parseInt(e.target.id);
+              console.log(e.target);
               if (!isNaN(id) && id >= 1 && id <= 25) {
                 cleanup(); // Чистит
                 resolve({ type: "div", divId: id });
@@ -116,7 +117,11 @@ await new Promise<void>((resolve) => {
     loss: async () => {
       this.GridCells.forEach((element) => element.classList.remove("win"));
       this.GridCells.forEach((element) => element.classList.remove("loss"));
+      this.GridCells.forEach((element) => element.classList.remove("flipped"));
       return "idle";
+    },
+    win: async () => {
+      return "idle"
     },
   };
   constructor() {

@@ -208,12 +208,33 @@ h1 {
     cursor:pointer;
     transform-style: preserve-3d;
     transition: transform 0.6s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+}
+.grid-cell::before{
+    content: "🔵";
 }
 .win {
     background: radial-gradient(ellipse at center,#fb942d, #ff8000); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
 }
 .loss {
     background: radial-gradient(ellipse at center, #f93535, #9a2424); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+}
+.loss::before{
+    content: "💥";
+}
+.win::before{
+    content: "⭐";
 }
 #button-random {
     border-radius: 2rem;
