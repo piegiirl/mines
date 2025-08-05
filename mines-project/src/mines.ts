@@ -1,11 +1,30 @@
 import type { Phase, PhaseHandler } from "./types";
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 class PhaseMachine {
   private GridCells: Array<HTMLDivElement> = [];
   private openCell: number = 0;
   private currentCellId: number = 0;
+  private balance: number = 1000;
+  private mines: number = 7;
+  private safeCells: number = 25 - this.mines;
+  private safeClick: number = 0;
+  private clickedCells = new Set();
+
+  randomSafeClick(min: number, max: number) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+  pickRandomCells(arr: number[], count: number): number[] {
+    const shuffled = arr.slice().sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, count);
+  }
+
   private phases: Record<Phase, PhaseHandler> = {
     idle: async () => {
+      this.clickedCells.clear();
+      this.GridCells.forEach((element) => element.classList.remove("flipped"));
+      this.GridCells.forEach((element) => element.classList.remove("win"));
+      this.GridCells.forEach((element) => element.classList.remove("loss"));
       document.getElementById("button-cash-out")!.style.display = "none";
       document.getElementById("button-bet")!.style.display = "block";
       this.GridCells = Array.from({ length: 25 }, (_, i) => i + 1).map(
@@ -13,9 +32,12 @@ class PhaseMachine {
       );
       this.GridCells.forEach((element) => element.classList.add("disabled"));
       this.openCell = 0;
-      this.openCell = 0;
       const buttonBet = document.getElementById("button-bet")!;
-await new Promise<void>((resolve) => {
+      this.safeClick = this.randomSafeClick(0, 25 - this.safeCells);
+      console.log(this.safeCells);
+      console.log(this.safeClick);
+
+      await new Promise<void>((resolve) => {
         const onClick = () => {
           buttonBet.removeEventListener("pointerdown", onClick);
           resolve();
@@ -28,7 +50,9 @@ await new Promise<void>((resolve) => {
     playing: async () => {
       document.getElementById("button-cash-out")!.style.display = "block";
       this.GridCells.forEach((element) => element.classList.add("active"));
-      function waitForDivClick(cleanup: ()=>{}) {
+      function waitForDivClick(
+        cleanup: () => {}
+      ): Promise<{ type: "div"; divId: number }> {
         return new Promise((resolve) => {
           function clickHandler(e: Event) {
             if (e.target instanceof HTMLDivElement) {
@@ -48,7 +72,9 @@ await new Promise<void>((resolve) => {
       }
 
       // Для кэш аута
-      function createCashOutPromise(cleanup: ()=>{}) {
+      function createCashOutPromise(
+        cleanup: () => {}
+      ): Promise<{ type: "cashOut" }> {
         const button = document.getElementById("button-cash-out")!;
         return new Promise((resolve) => {
           const clickHandler = () => {
@@ -64,42 +90,43 @@ await new Promise<void>((resolve) => {
         //@ts-ignore
         if (document._divClickHandler) {
           //@ts-ignore
-            document.removeEventListener('click', document._divClickHandler);
-            //@ts-ignore
-            delete document._divClickHandler;
+          document.removeEventListener("click", document._divClickHandler);
+          //@ts-ignore
+          delete document._divClickHandler;
         }
 
-        const cashOut = document.getElementById('button-cash-out')!;
+        const cashOut = document.getElementById("button-cash-out")!;
         //@ts-ignore
         if (cashOut._clickHandler) {
           //@ts-ignore
-            cashOut.removeEventListener('click', cashOut._clickHandler);
-            //@ts-ignore
-            delete cashOut._clickHandler;
+          cashOut.removeEventListener("click", cashOut._clickHandler);
+          //@ts-ignore
+          delete cashOut._clickHandler;
         }
-    };
-    
-    // СОздаем промисы гонки
-    //@ts-ignore
-    const divPromise = waitForDivClick(cleanup);
-    //@ts-ignore
-    const cashOutPromise = createCashOutPromise(cleanup);
-    
-    const result = await Promise.race([divPromise, cashOutPromise]);
-    if(result === "cashOut"){
-      return "win";
-    }else {
+      };
+
+      // СОздаем промисы гонки
       //@ts-ignore
-      this.currentCellId = result.divId;
-      console.log(result);
-      return "revealing";
-    }
+      const divPromise = waitForDivClick(cleanup);
+      //@ts-ignore
+      const cashOutPromise = createCashOutPromise(cleanup);
+
+      const result = await Promise.race([divPromise, cashOutPromise]);
+      if (result.type === "cashOut") {
+        return "win";
+      } else {
+        //@ts-ignore
+        this.currentCellId = result.divId;
+        console.log(result);
+        return "revealing";
+      }
     },
     revealing: async () => {
       console.log(this.currentCellId);
+      this.clickedCells.add(this.currentCellId);
       document.getElementById("button-cash-out")!.style.visibility = "disabled";
       this.openCell++;
-      if (this.openCell >= 5) {
+      if (this.openCell > this.safeClick) {
         document
           .getElementById("" + this.currentCellId)!
           .classList.toggle("flipped");
@@ -115,13 +142,45 @@ await new Promise<void>((resolve) => {
       }
     },
     loss: async () => {
-      this.GridCells.forEach((element) => element.classList.remove("win"));
-      this.GridCells.forEach((element) => element.classList.remove("loss"));
-      this.GridCells.forEach((element) => element.classList.remove("flipped"));
+      const unclicked = Array.from({ length: 25 }, (_, i) => i + 1).filter(
+        (i) => !this.clickedCells.has(i)
+      );
+      console.log(unclicked);
+      const arrayMines = this.pickRandomCells(unclicked, this.mines - 1);
+      console.log(arrayMines);
+      const minesSet = new Set(arrayMines);
+      const starsSet = new Set(unclicked).difference(minesSet);
+      Array.from(starsSet).forEach((id) => {
+        console.log(id);
+        document.getElementById("" + id)!.classList.add("flipped", "win");
+      });
+      arrayMines.forEach((id) => {
+        console.log(id);
+        document.getElementById("" + id)!.classList.add("flipped", "loss");
+      });
+      await sleep(2000);
       return "idle";
     },
     win: async () => {
-      return "idle"
+      const unclicked = Array.from({ length: 25 }, (_, i) => i + 1).filter(
+        (i) => !this.clickedCells.has(i)
+      );
+      console.log(unclicked);
+      const arrayMines = this.pickRandomCells(unclicked, this.mines - 1);
+      console.log(arrayMines);
+      const minesSet = new Set(arrayMines);
+      const starsSet = new Set(unclicked).difference(minesSet);
+      Array.from(starsSet).forEach((id) => {
+        console.log(id);
+        document.getElementById("" + id)!.classList.add("flipped", "win");
+      });
+      arrayMines.forEach((id) => {
+        console.log(id);
+        document.getElementById("" + id)!.classList.add("flipped", "loss");
+      });
+      await sleep(2000);
+
+      return "idle";
     },
   };
   constructor() {
