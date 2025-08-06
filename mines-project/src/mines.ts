@@ -5,9 +5,8 @@ class PhaseMachine {
   private GridCells: Array<HTMLDivElement> = [];
   private openCell: number = 0;
   private currentCellId: number = 0;
-  private balance: number = 1000;
-  private mines: number = 7;
-  private safeCells: number = 25 - this.mines;
+  private mines: number = 0;
+  private safeCells: number = 0;
   private safeClick: number = 0;
   private clickedCells = new Set();
 
@@ -21,6 +20,13 @@ class PhaseMachine {
 
   private phases: Record<Phase, PhaseHandler> = {
     idle: async () => {
+      const selectElement = document.querySelector('.mines-select') as HTMLSelectElement;
+      const handleChange = (event: Event) => {
+        this.mines = Number((event.target as HTMLSelectElement).value);
+        this.safeCells = 25 - this.mines;
+      }
+      selectElement.addEventListener("change", handleChange);
+
       this.clickedCells.clear();
       this.GridCells.forEach((element) => element.classList.remove("flipped"));
       this.GridCells.forEach((element) => element.classList.remove("win"));
@@ -33,9 +39,8 @@ class PhaseMachine {
       this.GridCells.forEach((element) => element.classList.add("disabled"));
       this.openCell = 0;
       const buttonBet = document.getElementById("button-bet")!;
-      this.safeClick = this.randomSafeClick(0, 25 - this.safeCells);
-      console.log(this.safeCells);
-      console.log(this.safeClick);
+      this.safeClick = this.randomSafeClick(0, this.safeCells);
+      console.log("SafeClick: ",this.safeClick);
 
       await new Promise<void>((resolve) => {
         const onClick = () => {
@@ -45,6 +50,8 @@ class PhaseMachine {
 
         buttonBet.addEventListener("pointerdown", onClick);
       });
+      selectElement.removeEventListener("change", handleChange, true);
+      console.log("mines: ", this.mines, "safeCells: ", this.safeCells);
       return "playing";
     },
     playing: async () => {
@@ -166,7 +173,7 @@ class PhaseMachine {
         (i) => !this.clickedCells.has(i)
       );
       console.log(unclicked);
-      const arrayMines = this.pickRandomCells(unclicked, this.mines - 1);
+      const arrayMines = this.pickRandomCells(unclicked, this.mines);
       console.log(arrayMines);
       const minesSet = new Set(arrayMines);
       const starsSet = new Set(unclicked).difference(minesSet);
