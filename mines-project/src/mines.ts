@@ -1,4 +1,7 @@
 import type { Phase, PhaseHandler } from "./types";
+import {randomSafeClick} from "./utils";
+import { pickRandomCells} from "./utils";
+import { MULTIPLIER} from "./utils";
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 class PhaseMachine {
@@ -9,14 +12,11 @@ class PhaseMachine {
   private safeCells: number = 0;
   private safeClick: number = 0;
   private clickedCells = new Set();
+  private balance: number  = 1000;
+  private bet: number = 1.2;
+  private win: number = this.bet;
+  private coeff: number = 0;
 
-  randomSafeClick(min: number, max: number) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-  }
-  pickRandomCells(arr: number[], count: number): number[] {
-    const shuffled = arr.slice().sort(() => Math.random() - 0.5);
-    return shuffled.slice(0, count);
-  }
 
   private phases: Record<Phase, PhaseHandler> = {
     idle: async () => {
@@ -39,7 +39,7 @@ class PhaseMachine {
       this.GridCells.forEach((element) => element.classList.add("disabled"));
       this.openCell = 0;
       const buttonBet = document.getElementById("button-bet")!;
-      this.safeClick = this.randomSafeClick(0, this.safeCells);
+      this.safeClick = randomSafeClick(0, this.safeCells);
       console.log("SafeClick: ",this.safeClick);
 
       await new Promise<void>((resolve) => {
@@ -51,6 +51,10 @@ class PhaseMachine {
         buttonBet.addEventListener("pointerdown", onClick);
       });
       selectElement.removeEventListener("change", handleChange, true);
+
+      this.coeff = MULTIPLIER[this.mines-1];
+      console.log("coeff", this.coeff);
+
       console.log("mines: ", this.mines, "safeCells: ", this.safeCells);
       return "playing";
     },
@@ -138,6 +142,8 @@ class PhaseMachine {
           .getElementById("" + this.currentCellId)!
           .classList.toggle("flipped");
         document.getElementById("" + this.currentCellId)!.classList.add("loss");
+        this.win = 0;
+        console.log("win", this.win); 
         return "loss";
       } else {
         console.log(this.currentCellId);
@@ -145,6 +151,8 @@ class PhaseMachine {
           .getElementById("" + this.currentCellId)!
           .classList.toggle("flipped");
         document.getElementById("" + this.currentCellId)!.classList.add("win");
+        this.win += this.coeff;
+        console.log("win", this.win); 
         return "playing";
       }
     },
@@ -152,17 +160,17 @@ class PhaseMachine {
       const unclicked = Array.from({ length: 25 }, (_, i) => i + 1).filter(
         (i) => !this.clickedCells.has(i)
       );
-      console.log(unclicked);
-      const arrayMines = this.pickRandomCells(unclicked, this.mines - 1);
-      console.log(arrayMines);
+      //console.log(unclicked);
+      const arrayMines = pickRandomCells(unclicked, this.mines - 1);
+      //console.log(arrayMines);
       const minesSet = new Set(arrayMines);
       const starsSet = new Set(unclicked).difference(minesSet);
       Array.from(starsSet).forEach((id) => {
-        console.log(id);
+        //console.log(id);
         document.getElementById("" + id)!.classList.add("flipped", "win");
       });
       arrayMines.forEach((id) => {
-        console.log(id);
+        //console.log(id);
         document.getElementById("" + id)!.classList.add("flipped", "loss");
       });
       await sleep(2000);
@@ -172,21 +180,22 @@ class PhaseMachine {
       const unclicked = Array.from({ length: 25 }, (_, i) => i + 1).filter(
         (i) => !this.clickedCells.has(i)
       );
-      console.log(unclicked);
-      const arrayMines = this.pickRandomCells(unclicked, this.mines);
-      console.log(arrayMines);
+      //console.log(unclicked);
+      const arrayMines = pickRandomCells(unclicked, this.mines);
+      //console.log(arrayMines);
       const minesSet = new Set(arrayMines);
       const starsSet = new Set(unclicked).difference(minesSet);
       Array.from(starsSet).forEach((id) => {
-        console.log(id);
+        //console.log(id);
         document.getElementById("" + id)!.classList.add("flipped", "win");
       });
       arrayMines.forEach((id) => {
-        console.log(id);
+        //console.log(id);
         document.getElementById("" + id)!.classList.add("flipped", "loss");
       });
       await sleep(2000);
-
+      this.balance += this.win;
+      console.log(this.balance);
       return "idle";
     },
   };
