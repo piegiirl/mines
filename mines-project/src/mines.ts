@@ -61,6 +61,7 @@ class PhaseMachine {
       this.balanceStore.placeBet(1);
       return "playing";
     },
+
     playing: async () => {
       document.getElementById("button-cash-out")!.style.display = "block";
       this.GridCells.forEach((element) => element.classList.add("active"));
@@ -135,6 +136,7 @@ class PhaseMachine {
         return "revealing";
       }
     },
+
     revealing: async () => {
       console.log(this.currentCellId);
       this.clickedCells.add(this.currentCellId);
@@ -155,6 +157,7 @@ class PhaseMachine {
         return "playing";
       }
     },
+
     loss: async () => {
       const unclicked = Array.from({ length: 25 }, (_, i) => i + 1).filter(
         (i) => !this.clickedCells.has(i)
@@ -175,7 +178,9 @@ class PhaseMachine {
       await sleep(2000);
       return "idle";
     },
+
     win: async () => {
+      this.balanceStore.winBet(10);
       const unclicked = Array.from({ length: 25 }, (_, i) => i + 1).filter(
         (i) => !this.clickedCells.has(i)
       );
@@ -196,6 +201,7 @@ class PhaseMachine {
       return "idle";
     },
   };
+
   constructor() {
     this.execute("idle");
   }
