@@ -154,6 +154,8 @@ class PhaseMachine {
           .getElementById("" + this.currentCellId)!
           .classList.toggle("flipped");
         document.getElementById("" + this.currentCellId)!.classList.add("win");
+        const multiplier = (0.98 * (this.safeClick + 1) / (this.safeClick - this.openCell + 1)).toFixed(2);
+        console.log(multiplier);
         return "playing";
       }
     },
