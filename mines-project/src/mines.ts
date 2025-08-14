@@ -3,32 +3,34 @@ import { randomSafeClick } from "./utils";
 import { pickRandomCells } from "./utils";
 import { BalanceStore } from "./balanceStore";
 import { reaction } from "mobx";
+import { autorun} from "mobx";
+import { MathStore } from "./mathStore";
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 class PhaseMachine {
   private GridCells: Array<HTMLDivElement> = [];
-  private openCell: number = 0;
   private currentCellId: number = 0;
   private mines: number = 1;
-  private safeCells: number = 0;
-  private safeClick: number = 0;
   private clickedCells = new Set();
   private balanceStore = new BalanceStore();
-
+  private mathStore = new MathStore();
+  private multi: number = 1.01;
+  
   private phases: Record<Phase, PhaseHandler> = {
     idle: async () => {
+      this.mathStore.deleteOpenCell();
+
       const disposeReaction = reaction(
         () => this.balanceStore.balance, // следим только за balance
         (balance) => console.log("balance changed to", this.balanceStore.balance)
       );
-
       const selectElement = document.querySelector(
         ".mines-select"
       ) as HTMLSelectElement;
-      this.safeCells = 25 - this.mines;
+      this.mathStore.setSafeCells = this.mines;
       const handleChange = (event: Event) => {
         this.mines = Number((event.target as HTMLSelectElement).value);
-        this.safeCells = 25 - this.mines;
+        this.mathStore.setSafeCells = this.mines;
       };
       selectElement.addEventListener("change", handleChange);
 
@@ -42,10 +44,9 @@ class PhaseMachine {
         (_) => document.getElementById(`${_}`)! as HTMLDivElement
       );
       this.GridCells.forEach((element) => element.classList.add("disabled"));
-      this.openCell = 0;
+
       const buttonBet = document.getElementById("button-bet")!;
-      this.safeClick = randomSafeClick(0, this.safeCells);
-      console.log("SafeClick: ", this.safeClick);
+      this.mathStore.getRandomSafeClicks;
 
       await new Promise<void>((resolve) => {
         const onClick = () => {
@@ -57,7 +58,7 @@ class PhaseMachine {
       });
       selectElement.removeEventListener("change", handleChange, true);
 
-      console.log("mines: ", this.mines, "safeCells: ", this.safeCells);
+      console.log("mines: ", this.mines);
       this.balanceStore.placeBet(1);
       return "playing";
     },
@@ -141,21 +142,24 @@ class PhaseMachine {
       console.log(this.currentCellId);
       this.clickedCells.add(this.currentCellId);
       document.getElementById("button-cash-out")!.style.visibility = "disabled";
-      this.openCell++;
-      if (this.openCell > this.safeClick) {
+      this.mathStore.plusOpenCell();
+      if (this.mathStore.openCell > this.mathStore.safeClicks) {
         document
           .getElementById("" + this.currentCellId)!
           .classList.toggle("flipped");
         document.getElementById("" + this.currentCellId)!.classList.add("loss");
         return "loss";
       } else {
+        autorun(() => {
+        document.getElementById("multiplierDisplay")!.innerHTML = `${this.multi}`;
+      })
         console.log(this.currentCellId);
         document
           .getElementById("" + this.currentCellId)!
           .classList.toggle("flipped");
         document.getElementById("" + this.currentCellId)!.classList.add("win");
-        const multiplier = (0.98 * (this.safeClick + 1) / (this.safeClick - this.openCell + 1)).toFixed(2);
-        console.log(multiplier);
+        this.multi = this.mathStore.mathMulti;
+
         return "playing";
       }
     },
@@ -182,7 +186,7 @@ class PhaseMachine {
     },
 
     win: async () => {
-      this.balanceStore.winBet(10);
+      this.balanceStore.winBet(10,this.multi);
       const unclicked = Array.from({ length: 25 }, (_, i) => i + 1).filter(
         (i) => !this.clickedCells.has(i)
       );

@@ -15,8 +15,8 @@ export class BalanceStore {
     return true;
   }
 
-  winBet(amount: number) {
-    this.balance += amount;
+  winBet(amount: number, multi: number) {
+    this.balance += amount*multi;
   }
   constructor() {
     makeAutoObservable(this);
