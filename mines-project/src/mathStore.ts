@@ -2,7 +2,7 @@ import { makeAutoObservable, reaction, autorun } from "mobx";
 import { randomSafeClick } from "./utils";
 export class MathStore {
   openCell: number = 0;
-  multiplier: number = 1.01;
+  multiplier: number = 0;
   safeClicks: number = 0;
   safeCells: number = 0;
   get mathMulti() {
