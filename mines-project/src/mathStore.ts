@@ -2,12 +2,10 @@ import { makeAutoObservable, reaction, autorun } from "mobx";
 import { randomSafeClick } from "./utils";
 export class MathStore {
   openCell: number = 0;
-  multiplier: number = 0;
   safeClicks: number = 0;
   safeCells: number = 0;
-  get mathMulti() {
-    this.multiplier = Number((0.98 * (this.safeClicks + 1) / (this.safeClicks - this.openCell + 1)).toFixed(2));
-    return this.multiplier;
+  get multiplier() {
+    return Number((0.98 * (this.safeClicks + 1) / (this.safeClicks - this.openCell + 1)).toFixed(2));
   }
   plusOpenCell(){
     this.openCell++;
@@ -15,10 +13,12 @@ export class MathStore {
   deleteOpenCell(){
     return this.openCell = 0;
   }
-  set setSafeCells(mines: number){
-    this.safeCells = 25 - mines;
+
+  setSafeCells(value:number) {
+    this.safeCells = value;
   }
-  get getRandomSafeClicks(){
+
+  randomSafeClicks(){
     return this.safeClicks = randomSafeClick(0, this.safeCells);
   }
   constructor() {
